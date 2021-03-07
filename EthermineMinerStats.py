@@ -1,7 +1,8 @@
 import time
 from datetime import datetime, timedelta
 
-import flexpoolapi
+from ethermine import Ethermine
+
 import pygsheets
 
 import cryptocompare
@@ -13,9 +14,12 @@ import cryptocompare
 # flexpoolapi.pool.miners_online()
 # flexpoolapi.pool.workers_online()
 
+ethermine = Ethermine()
+
 # Miner
 # TODO Replace with your miner address here:
-miner = flexpoolapi.miner("0x5400c6A42F522ed2F996F25dD468d6d70e065035")
+miner = ethermine.miner_dashboard("3ba51fe085633a5671f36b5646cf091075AF2B7B")
+
 
 # Initialize Google Sheets
 # TODO Follow the instructions here to download a client_secret.json file
@@ -43,13 +47,13 @@ def miner_monitor(interval_minutes=5):
         # Save Miner balance to Google Sheets
         ETH_price = cryptocompare.get_price('ETH', currency='USD')
         print(f"Current ETH price: {ETH_price['ETH']['USD']} USD")
-        flex_balance = miner.balance()
+        ethermine_balance = miner["currentStatistics"]["unpaid"]
         wks.insert_rows(1, 1, None, False)
         wks.update_value((2, 1), current_time)  # (1,1) is also A1
-        wks.update_value((2, 2), flex_balance)  # (1,1) is also A1
-        wks.update_value((2, 3), flex_balance / 1e18, True)
+        wks.update_value((2, 2), ethermine_balance)  # (1,1) is also A1
+        wks.update_value((2, 3), ethermine_balance / 1e18, True)
         wks.update_value((2, 4), ETH_price['ETH']['USD'], True)
-        wks.update_value((2, 5), flex_balance / 1e18 * ETH_price['ETH']['USD'], True)
+        wks.update_value((2, 5), ethermine_balance / 1e18 * ETH_price['ETH']['USD'], True)
         wks.update_value((2, 6), "=E2-E3")  # Difference from previous cell
         wks.update_value((2, 7), "=E2-E289")  # 24 hour rolling revenue based on 5 min intervals
         wks.update_value((2, 8), "=IF(C2-C3<>0,C2-C3,)")  # ETH Difference for blocks and payouts
