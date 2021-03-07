@@ -3,7 +3,7 @@ Fork of FlexpoolMinerStats. All credits to the original repository for the code.
 
 By default, stats are saved to Google Sheets once every 5 minutes and when the script is first run
 
-To start monitoring Flexpool stats, use the EthermineMinerStats.py file
+To start monitoring Ethermine stats, use the EthermineMinerStats.py file
 
 ![Miner stats screenshot](/Miner_stats.png)
 
