@@ -16,11 +16,6 @@ import cryptocompare
 
 ethermine = Ethermine()
 
-# Miner
-# TODO Replace with your miner address here:
-miner = ethermine.miner_dashboard("3ba51fe085633a5671f36b5646cf091075AF2B7B")
-
-
 # Initialize Google Sheets
 # TODO Follow the instructions here to download a client_secret.json file
 # (Enable the Google Drive API and the Google Sheets API for your Google developer account and create a OAuth 2.0 Client ID on Google API with type "Desktop")
@@ -47,6 +42,9 @@ def miner_monitor(interval_minutes=5):
         # Save Miner balance to Google Sheets
         ETH_price = cryptocompare.get_price('ETH', currency='USD')
         print(f"Current ETH price: {ETH_price['ETH']['USD']} USD")
+        # Miner
+        # TODO Replace with your miner address here:
+        miner = ethermine.miner_dashboard("3ba51fe085633a5671f36b5646cf091075AF2B7B")
         ethermine_balance = miner["currentStatistics"]["unpaid"]
         wks.insert_rows(1, 1, None, False)
         wks.update_value((2, 1), current_time)  # (1,1) is also A1
